@@ -104,13 +104,13 @@ function App() {
                 <Textarea
                     placeholder="ポストする文章です"
                     value={responseText}
-                    readOnly
                 />
                 <Div p="1rem" d="flex" justify="flex-end">
                     <Button
-                        onClick={submitTweet}>
-                        {isTweetLoading ? "ポスト中..." : ""}
-                    ポスト
+                        onClick={submitTweet}
+                        disabled={isTweetLoading}
+                    >
+                        {isTweetLoading ? "ポスト中..." : "ポスト"}
                     </Button>
                 </Div>
                 <SuccessNotification message={notificationMessage} isOpen={showSuccess} onClose={() => setShowSuccess(false)} />

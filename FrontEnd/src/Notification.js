@@ -1,6 +1,6 @@
 // Light Notifications
-import React, { useState } from 'react';
-import { Div, Button, Notification, Icon } from "atomize";
+import React from 'react';
+import { Notification, Icon } from "atomize";
 
 
 function SuccessNotification({ message, isOpen, onClose }) {
