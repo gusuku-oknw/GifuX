@@ -25,9 +25,10 @@ def generate_text(text):
         model="gpt-3.5-turbo",
         messages=messages,
         temperature=0.2,
-        max_tokens=50
+        max_tokens=140
     )
 
     # # 新しいAPI形式でレスポンスを取得
     translated_text = response.choices[0].message.content.strip()
+    print(translated_text)
     return translated_text
