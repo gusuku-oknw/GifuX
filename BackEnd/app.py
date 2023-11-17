@@ -2,8 +2,10 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 import logging
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import tweepy
+
+import Generate
 
 load_dotenv()
 
@@ -22,6 +24,18 @@ ACCESS_SECRET = os.environ.get('AccessTokenSecret')
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/ChatGPT', methods=['POST'])
+def chat_gpt():
+    try:
+        content = request.json.get('text', f'Test content at {datetime.now()}')
+        generated_text = Generate.generate_text(content)
+        return jsonify({'generated_text': generated_text}), 200
+
+    except Exception as e:
+        app.logger.error(f"Error while generating text: {e}")
+        return jsonify({'error': f"Error while generating text: {e}"}), 500
 
 
 @app.route('/tweet', methods=['POST'])

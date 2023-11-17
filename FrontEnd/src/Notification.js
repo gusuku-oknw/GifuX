@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Div, Button, Notification, Icon } from "atomize";
 
 
-function SuccessNotification({ isOpen, onClose }) {
+function SuccessNotification({ message, isOpen, onClose }) {
     return (
         // Success
         <Notification
@@ -13,12 +13,12 @@ function SuccessNotification({ isOpen, onClose }) {
             onClose={onClose}
             prefix={<Icon name="Success" color="success800" size="18px" m={{r: "0.5rem"}}/>}
         >
-            This is a success message
+            {message}
         </Notification>
     );
 }
 
-function WarningNotification({ isOpen, onClose }) {
+function WarningNotification({ message, isOpen, onClose }) {
     return (
         // Warning
         <Notification
@@ -35,7 +35,7 @@ function WarningNotification({ isOpen, onClose }) {
                 />
             }
         >
-            This is a warning message
+            {message}
         </Notification>
     );
 }

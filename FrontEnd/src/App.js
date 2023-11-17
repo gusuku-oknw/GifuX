@@ -4,6 +4,7 @@ import { SuccessNotification, WarningNotification, InfoNotification, AlertNotifi
 
 function App() {
     const [tweetText, setTweetText] = useState('');
+    const [ChatGPTText, setChatGPTText] = useState('');
     const [showSuccess, setShowSuccess] = useState(false);
     const [showWarning, setShowWarning] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
@@ -33,28 +34,64 @@ function App() {
         }
     };
 
+    const submitChatGPT = async () => {
+        try {
+            const response = await fetch('/ChatGPT', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: ChatGPTText }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setTweetText(data.generated_text); // Update the tweetText state
+                setShowSuccess(true);
+            } else {
+                setShowWarning(true);
+            }
+        } catch (error) {
+            setShowAlert(true);
+        }
+    };
+
+
     return (
         <Div m="3rem">
             <header>
-                <Div>
+                <Div　p="1rem">
                     chatGPTを使用したツイートをしよう
                 </Div>
             </header>
             <main>
                 <Textarea
-                    placeholder="What's happening?"
+                    placeholder="キーワードや文章を入力してください"
+                    value={ChatGPTText}
+                    onChange={handleTweetChange}
+                />
+                <Div p="1rem" d="flex" justify="flex-end">
+                    <Button
+                        bg="success800"
+                        onClick={submitChatGPT}>
+                        生成
+                    </Button>
+                </Div>
+                <Textarea
+                    placeholder={"ポストする文章です"}
                     value={tweetText}
                     onChange={handleTweetChange}
                 />
-                <Div d="flex" justify="flex-end">
-                    <Button onClick={submitTweet}>
-                        Tweet
+                <Div p="1rem" d="flex" justify="flex-end">
+                    <Button
+                        onClick={submitTweet}>
+                        ポスト
                     </Button>
                 </Div>
-                <SuccessNotification isOpen={showSuccess} onClose={() => setShowSuccess(false)} />
-                <WarningNotification isOpen={showWarning} onClose={() => setShowWarning(false)} />
-                <InfoNotification isOpen={showInfo} onClose={() => setShowInfo(false)} />
-                <AlertNotification isOpen={showAlert} onClose={() => setShowAlert(false)} />
+                <SuccessNotification message={"ツイートしました"} isOpen={showSuccess} onClose={() => setShowSuccess(false)} />
+                <WarningNotification message={"Warning"} isOpen={showWarning} onClose={() => setShowWarning(false)} />
+                <InfoNotification message={""}　isOpen={showInfo} onClose={() => setShowInfo(false)} />
+                <AlertNotification message={"エラー"}　isOpen={showAlert} onClose={() => setShowAlert(false)} />
             </main>
         </Div>
     );
