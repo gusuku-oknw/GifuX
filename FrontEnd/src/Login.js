@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { Div, Input, Button, Anchor } from 'atomize';
 import { SuccessNotification, WarningNotification, InfoNotification, AlertNotification } from './Notification';
 
-function Login() {
+function Login({ onLoginSuccess }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [showSuccess, setShowSuccess] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
+    const [showWarning, setShowWarning] = useState(false);
+    const [notificationMessage, setNotificationMessage] = useState('');
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -16,6 +19,7 @@ function Login() {
             setPassword(value);
         }
     };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -37,16 +41,17 @@ function Login() {
             if (response.ok) {
                 const data = await response.json();
                 // ログイン成功時の処理をここに書く
-                console.log('Login successful', data);
+                setNotificationMessage("ログインしました")
+                onLoginSuccess();
             } else {
                 // レスポンスがOKでない場合のエラー処理
-                setShowWarning(true);
                 setErrorMessage('Login failed. Please check your credentials.');
+                setShowWarning(true);
             }
         } catch (error) {
             console.error('Login error:', error);
-            setShowAlert(true);
             setErrorMessage('An error occurred while logging in.');
+            setShowAlert(true);
         }
     };
 
@@ -76,7 +81,9 @@ function Login() {
                 <Button type="submit" w="100%">Login</Button>
             </form>
             <Anchor href="#" m={{ t: "1rem" }}>Forgot password?</Anchor>
-            <AlertNotification message={setErrorMessage} isOpen={showAlert} onClose={() => setShowAlert(false)} />
+            <SuccessNotification message={notificationMessage} isOpen={showSuccess} onClose={() => setShowSuccess(false)} />
+            <AlertNotification message={errorMessage} isOpen={showAlert} onClose={() => setShowAlert(false)} />
+            <WarningNotification message={errorMessage} isOpen={showWarning} onClose={() => setShowWarning(false)} />
         </Div>
     );
 }

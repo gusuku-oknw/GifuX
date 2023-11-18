@@ -3,6 +3,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 import logging
 from flask import Flask, render_template, request, jsonify
+
 import tweepy
 
 import Generate
@@ -20,10 +21,26 @@ CONSUMER_SECRET = os.environ.get('APIKeySecret')
 ACCESS_TOKEN = os.environ.get('AccessToken')
 ACCESS_SECRET = os.environ.get('AccessTokenSecret')
 
+AUTHORIZED_USERNAME = os.getenv('AUTHORIZED_USERNAME')
+AUTHORIZED_PASSWORD = os.getenv('AUTHORIZED_PASSWORD')
+
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+
+    # ユーザー名とパスワードのチェック
+    if username == AUTHORIZED_USERNAME and password == AUTHORIZED_PASSWORD:
+        return jsonify({"message": "Login successful"}), 200
+    else:
+        return jsonify({"message": "Invalid credentials"}), 401
 
 
 @app.route('/ChatGPT', methods=['POST'])
