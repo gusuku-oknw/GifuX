@@ -67,6 +67,10 @@ function App() {
         setIsTweetLoading(false); // End loading
     };
 
+    const handleResponseChange = (event) => {
+        setResponseText(event.target.value);
+    };
+
     return (
         <Div m="3rem">
             {!isAuthenticated ? (
@@ -106,6 +110,7 @@ function App() {
                 <Textarea
                     placeholder="ポストする文章です"
                     value={responseText}
+                    onChange={handleResponseChange} // Add this line to enable editing
                 />
                 <Div p="1rem" d="flex" justify="flex-end">
                     <Button
