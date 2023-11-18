@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Div, Button, Textarea, Icon } from 'atomize'
 import { SuccessNotification, WarningNotification, InfoNotification, AlertNotification } from './Notification';
+import Login from './Login'; // Adjust the path according to your file structure
 
 function App() {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [inputText, setInputText] = useState('');
     const [responseText, setResponseText] = useState('');
     const [notificationMessage, setNotificationMessage] = useState('');
@@ -67,12 +69,12 @@ function App() {
 
     return (
         <Div m="3rem">
-            <header>
-                <Div p="1rem">
-                    chatGPTを使用したツイートをしよう
-                </Div>
-            </header>
-            <main>
+            {!isAuthenticated ? (
+                // Render Login component when not authenticated
+                <Login onLoginSuccess={() => setIsAuthenticated(true)} />
+            ) : (
+                // Main content
+                <main>
                 <Textarea
                     placeholder="キーワードや文章を入力してください"
                     value={inputText}
@@ -117,6 +119,7 @@ function App() {
                 <WarningNotification message={"Warning"} isOpen={showWarning} onClose={() => setShowWarning(false)} />
                 <AlertNotification message={"エラー"} isOpen={showAlert} onClose={() => setShowAlert(false)} />
             </main>
+                )};
         </Div>
     );
 }
